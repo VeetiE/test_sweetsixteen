@@ -1,10 +1,12 @@
 
 from services.reference_service import ReferenceService
+import uilibrary
 
 class UI:
 
     def __init__(self):
         self.ref_service = ReferenceService()
+        self.ui_library=uilibrary()
 
     def query(self):
 
@@ -30,9 +32,14 @@ class UI:
                     print(type)
 
             if cmd == "3":
-                book_dict = self.book()
-                self.ref_service.validate_book_input(book_dict)
-                self.ref_service.submit_book_reference(book_dict)
+                ''' book_dict = self.book()
+                    self.ref_service.validate_book_input(book_dict)
+                    self.ref_service.submit_book_reference(book_dict) '''
+                while key not in ['book', 'misc', 'article', 'phdthesis', 'incollection']:
+                    key = input("Which reference type? (book/misc/article/phdthesis/incollection")
+                ref_dict = self.ref_query(key)
+                self.ref_service.validate_book_input(ref_dict)
+                self.ref_service.submit_book_reference(ref_dict)
 
             if cmd == "4":
                 all_references = self.ref_service.get_all_references()
@@ -44,9 +51,63 @@ class UI:
 
             if cmd not in ["1", "2", "3", "4"]:
                 break
+    
 
-    def book(self):
-        key = ''
+
+
+    def ref_query(self, key):
+        keys=self.ui_library.keys(key)
+        while author_or_editor not in ['1', '2']:
+            author_or_editor = input('Press 1 if your book has an author and 2 if an editor: ')
+        if author_or_editor == '1':
+            keys.remove('editor')        
+        elif author_or_editor == '2':
+            keys.remove('author')
+        ref_dict={}
+        for i in keys:
+            if keys[i] in ['author', 'editor', 'year', 'title', 'publisher', 'year', 'key']:
+                answer=''
+                while answer=='':
+                    answer=input(self.ui_library.questions_dict[keys[i]])
+            answer=input(self.ui_library.questions_dict[keys[i]])
+            ref_dict={
+                keys[i]:answer
+            }
+        return ref_dict
+
+
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        '''key = ''
         author_or_editor = 0
         author = ''
         editor = ''
@@ -93,4 +154,6 @@ class UI:
             'month': month,
             'note': note,
         }
-        return book_dict
+        return book_dict'''
+
+
